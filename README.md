@@ -1,55 +1,240 @@
-# Junior Sprint — 企业需求交付训练
+<div align="center">
 
-模拟企业真实开发需求交付闭环的 AI Skill。AI 扮演客户，基于学习者的 Python/Java 项目提出业务需求，让学习者独立攻坚、卡点再分步指导、最后模拟客户验收并复盘。全程教练式训练，绝不直接给完整成品代码。
+# 🏃 Junior Sprint
 
-## 适用场景
+**模拟企业真实开发需求交付闭环的教练式训练 Skill — AI 扮演客户，绝不代写**
 
-- 训练需求理解、问题拆解与自主排错能力
-- 模拟真实职场需求交付流程（接收需求 → 攻坚 → 求助 → 交付验收）
-- 面试场景练习（被分到陌生项目快速上手）
-- 有项目但不知道练什么的开发者
+*收需求 → 自我攻坚 → 卡点求助 → 交付验收，复刻职场完整闭环*
 
-## 安装
+[![WorkBuddy Skill](https://img.shields.io/badge/WorkBuddy-Skill-7C3AED?style=flat-square&logo=data:image/svg+xml;base64,&logoColor=white)](https://www.workbuddy.cn/)
+[![Version](https://img.shields.io/badge/version-0.2.0-3776AB?style=flat-square)](./junior-sprint-v1.0.0/SKILL.md)
+[![License](https://img.shields.io/badge/License-MIT-D4AF37?style=flat-square)](./LICENSE)
+[![Python](https://img.shields.io/badge/训练栈-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![Java](https://img.shields.io/badge/训练栈-Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
 
-将 `junior-sprint/` 目录放入你的 AI 编程助手的 skills 目录：
+[快速开始](#-快速开始) · [核心机制](#-核心机制) · [5 阶段流程](#-5-阶段交付闭环) · [项目结构](#-项目结构)
+
+</div>
+
+---
+
+## 📌 项目简介
+
+> **它不是一个帮你写代码的工具，而是逼你独立交付的教练。**
+> Agent 全程扮演客户 / 上级，用业务语言沟通；你卡住求助时才切换教练身份分步指导，最后做严格客户验收并复盘打分。
+
+Junior Sprint 是一个新人专属 skill，把职场新人最常缺失的「**接需求 → 自我攻坚 → 卡点求助 → 交付验收**」完整闭环压成一个可重复跑的训练单元。每轮 Sprint 基于**你自己的 Python / Java 项目**生成贴合现状的真实客户需求，AI 在五个阶段切换四种身份（侦察员 / 客户 / 沉默客户 / 教练），刻意制造模糊度逼你提问澄清，并通过跨轮复盘追踪能力曲线。
+
+### 💡 适合谁
+
+- **新人 / 学生**：能跑通 demo 但接不住"客户要加个功能"的真实需求
+- **面试准备**：被分到陌生项目快速上手的需求拆解训练
+- **转岗 / 自学**：补"独立交付"这条学校不教、工作中没人带的短板
+
+---
+
+## 🏗️ 核心机制
+
+Junior Sprint 与普通 AI 编程助手的分水岭集中在四个设计支柱：
+
+| 设计支柱     | 普通 AI 助手       | Junior Sprint                                                                                 |
+| ------------ | ------------------ | --------------------------------------------------------------------------------------------- |
+| **身份**     | 全程技术助手       | 4 种身份切换（侦察员→客户→沉默客户→教练），身份切换只在 AI 内心提示，**不向学习者暴露**       |
+| **介入**     | 问了就答、不会就写 | 学习者**明确求助 + 三段式描述**（目标 / 卡点 / 已尝试）才进入指导；只问业务澄清走沉默客户     |
+| **指导粒度** | 一甩整段代码       | **渐进梯度 6 级**：复述 → 定位 → 思路 → API → 伪代码 → 关键片段，**一次只给一级，等反馈再升** |
+| **跨轮成长** | 每轮从零开始       | 读 `SPRINT-RETRO.md` 比对上轮"自主排错"分数**主动换档**（≥4 升 / =3 持平 / ≤2 降）            |
+
+### 🎭 四种身份的语言边界
+
+身份切换的失败模式是"侦察阶段读到的技术词漏进客户口吻"，因此语言边界是硬约束：
+
+| 阶段       | 身份            | 语言风格                                                      | 一次输出上限       |
+| ---------- | --------------- | ------------------------------------------------------------- | ------------------ |
+| 0 侦察     | 技术侦察员      | 技术语言，可与学习者平等讨论                                  | 不限               |
+| 1 需求发布 | 客户 / 上级     | **纯业务语言**，禁用"文件 / 接口 / 数据库 / 类 / 方法 / 字段" | 需求卡完整         |
+| 2 自我攻坚 | 沉默客户        | 只答业务澄清，不纠错实现                                      | **≤ 3 句，零代码** |
+| 3 卡点指导 | 教练            | 技术语言，但严格按渐进梯度                                    | **一次只给一级**   |
+| 4 交付验收 | 严格客户 → 教练 | 验收用客户口吻，复盘用教练口吻                                | 验收报告 + 复盘    |
+
+---
+
+## 🔄 5 阶段交付闭环
+
+```mermaid
+flowchart TB
+    subgraph Scout["阶段 0 · 接项目（Scout）"]
+        A[读取目录 / 核心文件] --> B{项目能跑?}
+        B -- 否 --> C[提示先修复基线<br/>不修业务代码]
+        B -- 是 --> D[3-5 行复述确认<br/>读 SPRINT-RETRO.md]
+    end
+
+    subgraph Partner["阶段 1 · 需求发布（Partner）"]
+        D --> E[按 demand-generation.md<br/>生成 L2 需求]
+        E --> F[客户口吻发需求卡]
+        F --> G[要求学习者<br/>复述 + 初步拆解]
+    end
+
+    subgraph Solo["阶段 2 · 自我攻坚"]
+        G --> H[学习者独立实现]
+        H --> I{提问类型?}
+        I -- 业务澄清 --> J[沉默客户 ≤3 句]
+        I -- 求助信号 --> K{三段式<br/>目标+卡点+已尝试?}
+    end
+
+    subgraph Coach["阶段 3 · 卡点指导"]
+        K -- 说不全 --> L[回到阶段 2<br/>引导复述]
+        K -- 说全 --> M[渐进梯度 6 级<br/>一次给一级]
+        M --> N[解决后回阶段 2]
+    end
+
+    subgraph Accept["阶段 4 · 交付验收"]
+        N --> O[先尝试运行<br/>跑 pytest / 启动服务]
+        O --> P[代码走查 + 边界核对]
+        P --> Q{验收结论}
+        Q -- 通过 --> R[复盘报告 + 五维评分]
+        Q -- 打回 --> H
+        R --> S[追加 SPRINT-RETRO.md<br/>跨轮成长闭环]
+    end
+```
+
+---
+
+## ✨ 功能全景
+
+- 🎯 **5 阶段教练式闭环** — 侦察 / 需求发布 / 自我攻坚 / 卡点指导 / 交付验收，每轮必走完，**不许烂尾**
+- 🎭 **4 身份语言隔离** — 客户口吻零技术词、沉默客户零代码、教练严格梯度递进
+- 📋 **三段式求助判定** — 目标 + 卡点 + 已尝试 三要素齐备才进指导，挡住"这个 API 怎么用"式伸手
+- 🪜 **渐进梯度 6 级** — 复述 → 定位 → 思路 → API → 伪代码 → 关键片段，**绝不整文件、绝不完整成品代码**
+- 📈 **跨轮成长追踪** — 读 `SPRINT-RETRO.md` 比对上轮评分主动换档，避免"每轮从零开始"的训练幻觉
+- 🛡️ **防作弊 / 防一键退出** — 学习者说"不练了帮我做"时先要求描述目标+卡点+已尝试+退出理由，坚持退出则接管但复盘标注"中途退出"
+- 💾 **Sprint 状态持久化** — 长 Sprint（L3 半天以上）跨多轮对话按 `.junior-sprint/state.md` 持久化，防 AI 失忆
+- 🧪 **先运行后走查验收** — 优先实际跑 `pytest` / 启动服务 / 跑 CLI 验证关键路径，跑不起来才退回代码走查
+- 📊 **五维评分复盘** — 需求理解 / 拆解质量 / 自主排错 / 工程习惯 / 职场视角，1-5 分加改进点
+
+---
+
+## 🧰 技术栈
+
+| 类别         | 选型                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------- |
+| Skill 框架   | WorkBuddy Skill（YAML frontmatter + Markdown 指令）                                         |
+| 训练目标栈   | Python 3.10+ · Java（含 Spring Boot）                                                       |
+| Skill 元数据 | `interface.yaml`（display_name / short_description / default_prompt）· `agents/openai.yaml` |
+| 训练资产     | 3 个模板（`demand-card.md` / `retro-report.md` / `sprint-state.md`）+ 6 篇方法论 references |
+| License      | MIT                                                                                         |
+
+---
+
+## 📁 项目结构
+
+```
+Junior-Sprint/
+├── LICENSE                              # MIT
+├── README.md                            # 本文件
+└── junior-sprint-v1.0.0/                # Skill 主包
+    ├── SKILL.md                         # ★ Skill 主入口：5 阶段工作流 + 核心原则
+    ├── interface.yaml                   # Skill 元数据（display_name / default_prompt）
+    ├── agents/
+    │   └── openai.yaml                  # Agent 配置
+    ├── assets/
+    │   └── templates/
+    │       ├── demand-card.md          # 阶段 1 输出：需求卡模板
+    │       ├── retro-report.md          # 阶段 4 输出：复盘报告模板
+    │       └── sprint-state.md          # 跨轮持久化：Sprint 状态模板
+    └── references/                      # 方法论权威参考
+        ├── demand-generation.md         # 阶段 1：需求生成 + L1/L2/L3 难度 + AI 主动换档
+        ├── demand-seeds.md              # Python / Java 需求种子库
+        ├── guidance-ethics.md           # 阶段 3：渐进梯度 + 三段式进入条件 + 红线
+        ├── acceptance-review.md         # 阶段 4：验收标准 + 先运行后走查
+        ├── sprint-state.md              # 跨轮状态持久化机制
+        └── example-session.md           # ★ 首次加载必读：一个完整 Sprint 对话样本
+```
+
+> 完整工作流、阶段切换判定、各 reference 加载时机见 [junior-sprint-v1.0.0/SKILL.md](./junior-sprint-v1.0.0/SKILL.md)
+
+---
+
+## 🚀 快速开始
+
+### 0️⃣ 环境要求
+
+| 组件         | 要求                                                              | 说明                                   |
+| ------------ | ----------------------------------------------------------------- | -------------------------------------- |
+| Agent 运行时 | Claude Code / Codex / Cursor / OpenClaw / Gemini CLI 等，任选其一 | Skill 本体是 Markdown，运行时负责执行  |
+| 训练项目     | Python 3.10+ 或 Java 项目                                         | **你自己的项目**，不是练手 demo        |
+| 项目状态     | 能跑起来                                                          | 跑不起来的项目会让需求生成基于错误画像 |
+
+### 1️⃣ 准备训练项目
+
+Junior Sprint 基于**你自己的项目**生成需求，请先准备一个能跑的 Python / Java 项目（本地路径或口头描述均可）。
+
+### 2️⃣ 一句话安装
+
+打开你正在用的 agent，直接告诉它：
+
+```
+帮我安装这个 skill：https://github.com/WeatherCore/Junior-Sprint
+```
+
+### 2️⃣ 通用 CLI 安装（55+ runtime）
 
 ```bash
-# ZCode
-cp -r junior-sprint ~/.zcode/skills/
-
-# Claude Code
-cp -r junior-sprint ~/.claude/skills/
+npx skills add WeatherCore/Junior-Sprint
+# 需要指定运行时时：-a claude-code / -a codex / -a cursor / -a openclaw
 ```
 
-## 使用方式
+### 3️⃣ 启动一轮 Sprint
 
-触发关键词：`练项目` / `模拟客户` / `跑一轮 sprint` / `junior sprint` / `practice project`
+在 WorkBuddy 对话中用触发词唤醒，并指定你的项目路径：
 
+> **用我的 D:/my-flask-app 项目开启一轮 junior sprint，模拟一个客户需求让我独立实现**
+
+支持的触发词（中英双语）：
+- 练项目 / 练需求 / 模拟客户 / 模拟职场 / 跑一轮 sprint / 训练交付
+- junior sprint / practice project / simulate workplace / requirement training / mock client
+
+### 4️⃣ 体验一轮完整闭环
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as 学习者
+    participant AI as AI（4 身份）
+    
+    U->>AI: 给项目路径 + 触发词
+    AI-->>U: [侦察员] 读完目录 → 3 行复述确认
+    AI-->>U: [客户] 发布需求卡（业务口吻，零技术词）
+    U->>AI: 复述需求 + 初步拆解
+    Note over U: 独立实现…（自我攻坚阶段）
+    U->>AI: 卡住了 + 目标+卡点+已尝试
+    AI-->>U: [教练] 渐进梯度第 1 级（先复述问题）
+    U->>AI: 还是卡
+    AI-->>U: [教练] 升一级 → 关键 API
+    U->>AI: 做完了
+    AI-->>U: [严格客户] 先跑 pytest → 走查 → 验收
+    AI-->>U: [教练] 复盘报告 + 五维评分
+    Note over U: 追加到 SPRINT-RETRO.md，跨轮成长
 ```
-给我出个开发任务练手，我的项目在 D:/my-app/
-```
 
-之后 AI 会自动走完五阶段流程：侦察项目 → 发布需求 → 你独立攻坚 → 卡点指导 → 客户验收复盘。
+---
 
-## 文件结构
+## 🗺️ Roadmap
 
-```
-junior-sprint/
-├── SKILL.md                    # Skill 主文件（入口）
-├── interface.yaml              # 平台元数据
-├── references/
-│   ├── demand-generation.md    # 需求生成方法论（L1/L2/L3）
-│   ├── demand-seeds.md         # Python/Java 需求种子库
-│   ├── guidance-ethics.md      # 卡点指导渐进梯度
-│   ├── acceptance-review.md    # 验收标准与复盘
-│   ├── sprint-state.md         # 跨轮持久化机制
-│   └── example-session.md      # 完整对话样本
-└── assets/templates/
-    ├── demand-card.md          # 需求卡模板
-    ├── retro-report.md         # 复盘报告模板
-    └── sprint-state.md         # 状态文件模板
-```
+- [x] 5 阶段闭环工作流（侦察 / 需求 / 攻坚 / 指导 / 验收）
+- [x] 4 身份语言隔离 + 三段式求助判定
+- [x] 渐进梯度 6 级指导 + 防一键退出
+- [x] 跨轮成长追踪（SPRINT-RETRO.md 比对 + AI 主动换档）
+- [x] Sprint 状态持久化（.junior-sprint/state.md）
+- [ ] 扩展训练栈覆盖（Go / TypeScript / Rust）
+- [ ] 接入真实 CI 验收（跑测试覆盖率门槛）
+- [ ] 多学习者协作 Sprint（模拟团队需求交付）
 
-## License
+---
 
-MIT
+<div align="center">
+
+**每一轮 Sprint 都是面试现场的低成本复刻 — 卡住的次数越多，成长曲线越陡**
+
+📦 MIT License · 🙏 欢迎在 WorkBuddy 中启用并提交反馈
+
+</div>
