@@ -5,7 +5,7 @@ author: junior-sprint
 created: 2026-08-20
 updated: 2026-08-20
 tags: [training, developer-skills, requirement-delivery, python, java, coaching, simulation]
-description: 模拟企业真实开发需求交付闭环的训练 Skill。AI 扮演客户基于学习者 Python/Java 项目提出业务需求，让学习者独立攻坚、卡点再分步指导、最后模拟客户验收并复盘。教练式 AI，绝不直接给完整成品代码。
+description: 模拟企业真实开发需求交付闭环的训练 Skill。Use when 学习者说"练项目""模拟客户""跑一轮 sprint""junior sprint""practice project"等，需要训练需求理解、问题拆解与自主排错能力。AI 扮演客户基于 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。
 license: MIT
 ---
 
