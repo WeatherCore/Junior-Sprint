@@ -6,4 +6,4 @@ Junior Sprint 是基于 Skill 框架的企业需求交付训练器，通过客�
 
 ## English
 
-Junior Sprint is a WorkBuddy Skill running mock-client sprints on Python or Java projects to train comprehension and debugging independence. Its edge: four personas with strict language boundaries and a six-step ladder never handing over a full file. Built as SKILL.md, interface.yaml, six references, three templates. For newcomers, interview prep.
+Junior Sprint is a zcode skill running mock-client sprints on your own Python or Java projects, drilling the full loop of take-requirement, self-directed build, stuck-then-ask, and client acceptance. Its edge is identity and pacing control: four personas with strict language boundaries (a client who never speaks tech, a silent client capped at three sentences), a three-part help gate (goal + blocker + what was tried) before any coaching, a six-step guidance ladder given one level at a time and never a full file, cross-round growth tracking that reads SPRINT-RETRO.md and adapts difficulty, and anti-quit handling that demands a stated exit reason. Built as SKILL.md, interface.yaml, six references, three templates. For newcomers and interview prep.

@@ -1,7 +1,7 @@
 # Sprint 状态文件 · 跨轮持久化模板
 
-> 保存路径：`<项目根目录>/.junior-sprint/state.md`
-> 用途：长 Sprint 跨多轮对话时防止失忆。AI 在阶段切换或重要节点后生成此文件并提示学习者保存。
+> 保存路径：`<项目根目录>/.junior-sprint/state.md`（AI 直接写入；建议学习者把 `.junior-sprint/` 加入 .gitignore）
+> 用途：长 Sprint 跨多轮对话时防止失忆。AI 在阶段切换或重要节点后主动更新此文件。
 > 与 `SPRINT-RETRO.md` 的关系：state 记"过程"，retro 记"成长"。
 
 ---

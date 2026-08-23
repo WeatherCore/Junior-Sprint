@@ -11,14 +11,13 @@
 
 ## 持久化策略
 
-**学习者持有，AI 只生成模板提示**——AI 不主动写入学习者项目目录（除非学习者明确要求）。这是为了尊重"AI 不污染学习者代码库"的硬约束。
+**`.junior-sprint/state.md` 由 AI 主动维护**——它是过程日志，写它不算污染代码库；业务代码仍然只读。`SPRINT-RETRO.md` 不同：它是学习者的成长档案，AI 生成报告后由学习者确认追加，不代写。
 
 工作流：
 
-1. 触发时，AI 按本目录下 `assets/templates/sprint-state.md` 的模板生成当前状态快照。
-2. 提示学习者：把这段内容保存到 `<项目根目录>/.junior-sprint/state.md`。
-3. 下一轮对话恢复时，AI 先读 `.junior-sprint/state.md`，确认上一轮进行到哪个阶段、已交付什么、卡点记录。
-4. 下一轮 Sprint 启动时（阶段 0 完成后），AI 必读项目根目录的 `SPRINT-RETRO.md`（若存在），做"上轮 → 本轮"的成长对比，避免训练幻觉。
+1. 触发时，AI 按本目录下 `assets/templates/sprint-state.md` 的模板生成当前状态快照，**直接写入** `<项目根目录>/.junior-sprint/state.md`（首次写入时建议学习者把 `.junior-sprint/` 加入 .gitignore）。
+2. 下一轮对话恢复时，AI 先读 `.junior-sprint/state.md`，确认上一轮进行到哪个阶段、已交付什么、卡点记录。
+3. 下一轮 Sprint 启动时（阶段 0 侦察），AI 必读项目根目录的 `SPRINT-RETRO.md`（若存在），做"上轮 → 本轮"的成长对比，避免训练幻觉。
 
 ## 状态文件字段说明
 
