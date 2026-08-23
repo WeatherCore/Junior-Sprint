@@ -7,7 +7,7 @@
 *收需求 → 自我攻坚 → 卡点求助 → 交付验收，复刻职场完整闭环*
 
 [![ZCode Skill](https://img.shields.io/badge/ZCode-Skill-7C3AED?style=flat-square)](https://github.com/WeatherCore/Junior-Sprint)
-[![Version](https://img.shields.io/badge/version-1.1.0-3776AB?style=flat-square)](./skills/junior-sprint/SKILL.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-3776AB?style=flat-square)](./skills/junior-sprint/SKILL.md)
 [![License](https://img.shields.io/badge/License-MIT-D4AF37?style=flat-square)](./LICENSE)
 [![Python](https://img.shields.io/badge/训练栈-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Java](https://img.shields.io/badge/训练栈-Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -108,7 +108,8 @@ flowchart TB
 - 📈 **跨轮成长追踪** — 读 `SPRINT-RETRO.md` 比对上轮评分主动换档，避免"每轮从零开始"的训练幻觉
 - 🛡️ **防作弊 / 防一键退出** — 学习者说"不练了帮我做"时先要求描述目标+卡点+已尝试+退出理由，坚持退出则接管但复盘标注"中途退出"
 - 💾 **Sprint 状态持久化** — 长 Sprint（L3 半天以上）跨多轮对话由 AI 主动维护 `.junior-sprint/state.md`，防失忆
-- 🧪 **先运行后走查验收** — 优先实际跑 `pytest` / 启动服务 / 跑 CLI 验证关键路径，跑不起来才退回代码走查
+- 🧪 **先运行后走查验收** — 优先实际跑 `pytest` / 启动服务 / 跑 CLI 验证关键路径，跑不起来才退回代码走查；可能产生不可逆外部影响时先征得学习者确认
+- 🧹 **需求卡发布前自检** — `check_demand_card.py` 校验三要素 / Sprint ID / 技术词泄漏，把"身份撕裂"从模型自律变成机械校验
 - 📊 **五维评分复盘** — 需求理解 / 拆解质量 / 自主排错 / 工程习惯 / 沟通，1-5 分加改进点，另附职场视角叙述章
 
 ---
@@ -120,7 +121,7 @@ flowchart TB
 | Skill 框架   | zcode Skill（YAML frontmatter + Markdown 指令；skills CLI 官方支持 `-a zcode` 安装）         |
 | 训练目标栈   | Python 3.10+ · Java（含 Spring Boot）                                                       |
 | Skill 元数据 | `interface.yaml`（display_name / short_description / default_prompt）· `agents/openai.yaml` |
-| 训练资产     | 3 个模板（`demand-card.md` / `retro-report.md` / `sprint-state.md`）+ 6 篇方法论 references |
+| 训练资产     | 3 个模板（`demand-card.md` / `retro-report.md` / `sprint-state.md`）+ 6 篇方法论 references + 1 个发布前自检脚本 |
 | License      | MIT                                                                                         |
 
 ---
@@ -138,6 +139,8 @@ Junior-Sprint/
         ├── agents/
         │   └── openai.yaml              # Agent 配置
         ├── assets/
+        │   ├── scripts/
+        │   │   └── check_demand_card.py  # 阶段 1 发布前自检：三要素 + Sprint ID + 技术词零泄漏
         │   └── templates/
         │       ├── demand-card.md      # 阶段 1 输出：需求卡模板
         │       ├── retro-report.md      # 阶段 4 输出：复盘报告模板
@@ -148,7 +151,7 @@ Junior-Sprint/
             ├── guidance-ethics.md       # 阶段 3：渐进梯度 + 三段式进入条件 + 红线
             ├── acceptance-review.md     # 阶段 4：验收标准 + 先运行后走查
             ├── sprint-state.md          # 跨轮状态持久化机制
-            └── example-session.md       # ★ 首次加载必读：一个完整 Sprint 对话样本
+            └── example-session.md       # ★ 每次触发必读：完整 Sprint 对话样本 + 反例片段集
 ```
 
 > 完整工作流、阶段切换判定、各 reference 加载时机见 [skills/junior-sprint/SKILL.md](./skills/junior-sprint/SKILL.md)

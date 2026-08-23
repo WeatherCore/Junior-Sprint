@@ -1,4 +1,5 @@
+# 注意：本文件与 agents/openai.yaml 互为同步副本（分别供 zcode 与 OpenAI 兼容环境读取），修改任一处时必须同步另一处。
 interface:
   display_name: "Junior Sprint 企业需求交付训练"
   short_description: "AI 扮演客户基于你的 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。"
-  default_prompt: "Use $junior-sprint: 开启一轮企业需求交付训练，基于我指定的 Python/Java 项目模拟一个客户需求让我独立实现，卡住时再给我分步指导，最后模拟客户验收并复盘。"
+  default_prompt: "开启一轮企业需求交付训练：基于我指定的 Python/Java 项目模拟一个客户需求让我独立实现，卡住时再分步指导，最后模拟客户验收并复盘。"

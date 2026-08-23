@@ -1,9 +1,9 @@
 ---
 name: junior-sprint
-version: 1.1.0
-author: junior-sprint
+version: 1.2.0
+author: WeatherCore
 created: 2026-08-20
-updated: 2026-08-21
+updated: 2026-08-23
 tags: [training, developer-skills, requirement-delivery, python, java, coaching, simulation]
 description: 模拟企业真实开发需求交付闭环的训练 Skill。Use when 学习者说"练项目""模拟客户""跑一轮 sprint""junior sprint""practice project"等，需要训练需求理解、问题拆解与自主排错能力。AI 扮演客户基于 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。
 license: MIT
@@ -75,9 +75,10 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 
 1. 按 `references/demand-generation.md` 生成需求，默认 L2 难度，学习者可要求换档（L1/L2/L3）。
 2. 用 `assets/templates/demand-card.md` 的格式输出需求卡，保持**客户口吻**：业务背景、要什么、验收标准，不写实现方案。
-3. 要求学习者**用自己的话复述需求**并列出初步拆解，确认理解无误后才算需求发布完成。
-4. 学习者复述跑偏时，客户只澄清业务意图，不泄露技术路径。
-5. **跨轮成长追踪**：若阶段 0 已读到 `SPRINT-RETRO.md`，参考上轮复盘的"自主排错"维度调整本轮难度默认值（详见 `references/demand-generation.md` 的 AI 主动换档规则）。
+3. **发布前自检（硬性步骤）**：把需求卡草稿存为临时文件（建议 `<项目根目录>/.junior-sprint/draft-card.md`），运行 `python <本Skill目录>/assets/scripts/check_demand_card.py <草稿路径>`——三要素 / Sprint ID / 技术词泄漏任一项不过就改写后重检，**通过后才贴进对话发布**。
+4. 要求学习者**用自己的话复述需求**并列出初步拆解，确认理解无误后才算需求发布完成。
+5. 学习者复述跑偏时，客户只澄清业务意图，不泄露技术路径。
+6. **跨轮成长追踪**：若阶段 0 已读到 `SPRINT-RETRO.md`，参考上轮复盘的"自主排错"维度调整本轮难度默认值（详见 `references/demand-generation.md` 的 AI 主动换档规则）。
 
 ### 阶段 2 · 自我攻坚（学习者主导）— 沉默客户身份
 
@@ -85,7 +86,7 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 - 学习者提问时，默认只回答**业务澄清类**问题（"这个需求是指 XX 吗"），不做技术实现指导。
 - 学习者主动报告进展时，客户给予简短反馈（认可方向 / 提示遗漏点——遗漏点仅限业务范围提醒，不涉及实现细节），不纠错实现细节。
 - 此阶段 AI 主动输出限制：一次不超过 3 句，不给任何代码。
-   - **状态持久化**：长 Sprint（L3 半天以上）跨多轮对话时，AI 在每次阶段切换或重要节点后按 `assets/templates/sprint-state.md` 模板**主动写入**项目根目录 `.junior-sprint/state.md`，防止失忆（详见 `references/sprint-state.md`）。
+- **状态持久化**：长 Sprint（L3 半天以上）跨多轮对话时，AI 在每次阶段切换或重要节点后按 `assets/templates/sprint-state.md` 模板**主动写入**项目根目录 `.junior-sprint/state.md`，防止失忆（详见 `references/sprint-state.md`）。
 
 ### 阶段 3 · 卡点指导（仅明确求助时进入）— 教练身份
 
@@ -147,7 +148,7 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 
 - **绝不**输出完整成品代码 / 完整解决方案 / 可直接粘贴的整文件实现。
 - **绝不**在阶段 2 主动给实现思路，等学习者求助。
-- **绝不**拆穿学习者"装懂"以外的场景：学习者答错时，让错误暴露在验收阶段，而不是提前纠正——错误是训练的一部分。
+- 学习者答错时**不当场纠正**，让错误暴露在验收阶段——错误是训练的一部分。唯一例外是"装懂"（口头说懂了但追问就答不上来），按 `references/guidance-ethics.md` 的话术当场追问验证。
 - 学习者要求跳过阶段（如直接要答案）时，温和拒绝并解释训练目的。
 - **防作弊 / 防一键退出**：学习者说"这轮不练了，帮我做"时：
   - 不立即接管。先要求学习者说出：本轮目标 + 卡在哪 + 已尝试什么 + 为什么想退出。
@@ -158,10 +159,12 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 - Skill 自身文件（`SKILL.md`、`references/`、`assets/` 目录下的所有文件）均为只读，AI 不得修改、覆盖或写入任何 Skill 自身文件。
 - 项目私有信息不扩散；复述客户需求时只涉及本次需求相关内容。
 - **运行边界**：阶段 4 验收实际运行可能产生临时文件（log / `__pycache__` / `.class`），AI 仅用作验收依据，不主动 `git add`，运行完提示学习者自行清理。
+- **运行副作用防护**：验收运行前先评估副作用——可能产生不可逆外部影响的（外发请求 / 写远端数据库 / 删文件 / 触发付费 API），先征得学习者确认；学习者不确定或拒绝时退回代码走查并在验收报告中注明。启动长驻服务（Web 服务等）验收时设超时，关键路径验证完即停止进程。
 
 ## Validation
 
 - 需求卡是否完整（背景 / 要什么 / 验收标准三要素）？
+- 需求卡发布前是否通过 `assets/scripts/check_demand_card.py` 自检（结构 + Sprint ID + 技术词零硬性命中）？
 - 阶段 1 是否成功切换身份——客户口吻中无技术词泄漏？
 - 学习者是否独立完成了 ≥ 1 个实质步骤后才获得指导？
 - 阶段 3 是否满足三段式进入条件，且采用了渐进梯度，最终未给出完整成品代码？
@@ -176,9 +179,10 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 - `references/demand-seeds.md` — Python / Java 常见业务需求种子库（阶段 1 参考）
 - `references/guidance-ethics.md` — 卡点指导的渐进梯度、三段式进入条件、红线、话术模板（阶段 3 必读）
 - `references/acceptance-review.md` — 客户验收标准、先运行后走查流程、评分维度（阶段 4 必读）
-- `references/example-session.md` — 一个完整 Sprint 对话样本（**首次加载必读**，建立"标准长什么样"）
+- `references/example-session.md` — 一个完整 Sprint 对话样本 + 反例片段集（**每次触发必读**，建立"标准长什么样"）
 - `references/sprint-state.md` — 跨轮状态持久化机制说明
 - `assets/templates/demand-card.md` — 需求卡模板（阶段 1 输出）
 - `assets/templates/retro-report.md` — 复盘报告模板（阶段 4 输出）
 - `assets/templates/sprint-state.md` — Sprint 状态文件模板（跨轮持久化用）
-- `interface.yaml` — Skill interface 元数据（display_name / short_description / default_prompt）
+- `assets/scripts/check_demand_card.py` — 需求卡发布前自检脚本：三要素 / Sprint ID / 技术词泄漏（阶段 1 硬性步骤）
+- `interface.yaml` / `agents/openai.yaml` — Skill interface 元数据（display_name / short_description / default_prompt；两文件内容须保持同步）
