@@ -1,4 +1,8 @@
-# 注意：本文件与 agents/openai.yaml 互为同步副本（分别供 zcode 与 OpenAI 兼容环境读取），修改任一处时必须同步另一处。
+# 单一真源（Single Source of Truth）：本文件是 Skill 元数据的权威来源。
+# agents/openai.yaml 是本文件的自动镜像，仅供 OpenAI 兼容运行时读取，请勿手改——
+# 改这里后用以下命令重新生成镜像（保持两文件内容一致）：
+#     cp interface.yaml agents/openai.yaml
+# 若两文件出现不一致，以本文件（interface.yaml）为准。
 interface:
   display_name: "Junior Sprint 企业需求交付训练"
   short_description: "AI 扮演客户基于你的 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。"
