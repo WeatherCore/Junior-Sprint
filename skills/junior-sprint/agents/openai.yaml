@@ -1,4 +1,6 @@
-# 注意：本文件与 agents/openai.yaml 互为同步副本（分别供 zcode 与 OpenAI 兼容环境读取），修改任一处时必须同步另一处。
+# 自动镜像（MIRROR）：本文件内容由 ../interface.yaml 生成，请勿手改。
+# 重建命令：cp ../interface.yaml openai.yaml
+# 若与 interface.yaml（上级目录）不一致，以 interface.yaml 为准。
 interface:
   display_name: "Junior Sprint 企业需求交付训练"
   short_description: "AI 扮演客户基于你的 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。"
