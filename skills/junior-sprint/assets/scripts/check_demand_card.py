@@ -10,7 +10,7 @@
 
 检查项：
   1. 结构 —— 三要素（背景 / 要什么 / 验收标准）章节齐全；验收标准 ≥3 条；
-     含 Sprint ID（S-YYYYMMDD-NN，与复盘报告 / state 文件一致）。
+     含 Sprint ID（S-YYYYMMDD-N，N ≥1 位，与复盘报告 / state 文件一致）。
   2. 技术词泄漏 —— 分两级：
      硬性（FAIL）：语义无歧义的技术词，命中即必须改写——接口、数据库、字段、
        端点、路由、函数、变量、数据表、返回值、请求体，及 API / HTTP / JSON /
@@ -53,7 +53,7 @@ HARD_EN = [
 ]
 
 REQUIRED_SECTIONS = ["背景", "要什么", "验收标准"]
-SPRINT_ID_RE = re.compile(r"S-\d{8}-\d{2,}")
+SPRINT_ID_RE = re.compile(r"S-\d{8}-\d{1,}")
 SECTION_HEADING_RES = {
     "背景": re.compile(r"^#{2,6}\s*(?:业务背景|背景)\s*$", re.M),
     "要什么": re.compile(r"^#{2,6}\s*要什么\s*$", re.M),
@@ -83,7 +83,7 @@ def check_structure(text):
             problems.append("缺少「%s」章节标题（应为 ## / ### 级标题）" % name)
     m = SPRINT_ID_RE.search(text)
     if not m:
-        problems.append("缺少 Sprint ID（格式 S-YYYYMMDD-NN，须与复盘报告 / state 文件一致）")
+        problems.append("缺少 Sprint ID（格式 S-YYYYMMDD-N，N ≥1 位，须与复盘报告 / state 文件一致）")
     else:
         sprint_id = m.group(0)
     m = SECTION_HEADING_RES["验收标准"].search(text)
