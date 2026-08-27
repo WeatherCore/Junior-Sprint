@@ -2,6 +2,25 @@
 
 本项目所有重要变更记录于此。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本遵循语义化版本。
 
+## [1.3.0] - 2026-08-27
+
+### Fixed
+
+- **修复核心原则冲突（P0）**：防一键退出条款原允许"接管完成本轮交付"，与核心原则 #1「绝不代写完整代码」直接矛盾。现改为退出时 AI 只给【结构化实现清单 + 梯度第 6 级关键片段（≤10 行，逐行注释）】，绝不输出完整成品代码。
+- **统一 `SPRINT-RETRO.md` 写入权（P1）**：消除"AI 写入 SPRINT-RETRO.md"与"AI 不代写该文件"的矛盾——统一为 AI 生成带标注的复盘稿，**请学习者追加**，AI 不代写。
+- **`interface.yaml` 去重（P1）**：明确 `interface.yaml` 为元数据单一真源，`agents/openai.yaml` 改为其自动镜像并给出 `cp` 重建命令，消除手动双写同步负担。
+- **客户口吻禁词歧义（P1）**：阶段 1 发布前自检补充说明脚本两级扫描（硬性 FAIL / 软性 WARN），并强调脚本只是机械闸、上表禁用词仍须严格遵守。
+- **`check_demand_card.py` Sprint ID 正则**：由 `S-YYYYMMDD-NN`（强制 2 位）放宽为 `S-YYYYMMDD-N`（N ≥1 位），避免单数字序号被误判缺失。
+
+### Added
+
+- **`check_demand_card.py` 自测（P1）**：新增 `test_check_demand_card.py`（7 用例：合法通过 / 技术词拦截 / 缺章节 / 缺 Sprint ID / `--allow` 放行 / `--strict` 软性词 / 单数字 ID）与 `selftest.sh` 入口，回归验证 `Ran 7 tests ... OK`。
+- **三阶段门禁（P1）**：Validation 由扁平清单重构为【阶段 1 / 阶段 3 / 阶段 4 门禁】，并在对应阶段末尾加硬步骤指针，绑定防模型漂移。
+- **首触发 orientation（P2）**：学习者首次唤醒时 AI 先给 3 行流程预告，降低陌生感。
+- **L3 架构权衡样本（P2）**：example-session 新增「L3 架构卡点（梯度第 3 级架构例外）」对话样本。
+- **测试命令泛化（P2）**：阶段 4 与 README 的"跑 `pytest`"泛化为 `pytest` / `mvn test` / `gradle test`，与 Java 训练栈对齐。
+- **`references/sprint-state.md` 改名（P2）**：更名为 `references/state-persistence.md`，避免与 `assets/templates/sprint-state.md` 同名混淆；同步更新全部引用。
+
 ## [1.2.0] - 2026-08-23
 
 ### Fixed
