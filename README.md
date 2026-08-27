@@ -6,8 +6,8 @@
 
 *收需求 → 自我攻坚 → 卡点求助 → 交付验收，复刻职场完整闭环*
 
-[![ZCode Skill](https://img.shields.io/badge/ZCode-Skill-7C3AED?style=flat-square)](https://github.com/WeatherCore/Junior-Sprint)
-[![Version](https://img.shields.io/badge/version-1.3.0-3776AB?style=flat-square)](./skills/junior-sprint/SKILL.md)
+[![Skill](https://img.shields.io/badge/ZCode-Skill-7C3AED?style=flat-square)](https://github.com/WeatherCore/Junior-Sprint)
+[![Version](https://img.shields.io/badge/version-1.3.0-3776AB?style=flat-square)](./Junior-Sprint-v1.3.0/SKILL.md)
 [![License](https://img.shields.io/badge/License-MIT-D4AF37?style=flat-square)](./LICENSE)
 [![Python](https://img.shields.io/badge/训练栈-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Java](https://img.shields.io/badge/训练栈-Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -132,29 +132,32 @@ flowchart TB
 Junior-Sprint/
 ├── LICENSE                              # MIT
 ├── README.md                            # 本文件
-└── skills/
-    └── junior-sprint/                   # Skill 主包（skills CLI 标准布局）
-        ├── SKILL.md                     # ★ Skill 主入口：5 阶段工作流 + 核心原则
-        ├── interface.yaml               # Skill 元数据（display_name / default_prompt）
-        ├── agents/
-        │   └── openai.yaml              # Agent 配置
-        ├── assets/
-        │   ├── scripts/
-        │   │   └── check_demand_card.py  # 阶段 1 发布前自检：三要素 + Sprint ID + 技术词零泄漏
-        │   └── templates/
-        │       ├── demand-card.md      # 阶段 1 输出：需求卡模板
-        │       ├── retro-report.md      # 阶段 4 输出：复盘报告模板
-        │       └── sprint-state.md      # 跨轮持久化：Sprint 状态模板
-        └── references/                  # 方法论权威参考
-            ├── demand-generation.md     # 阶段 1：需求生成 + L1/L2/L3 难度 + AI 主动换档
-            ├── demand-seeds.md          # Python / Java 需求种子库
-            ├── guidance-ethics.md       # 阶段 3：渐进梯度 + 三段式进入条件 + 红线
-            ├── acceptance-review.md     # 阶段 4：验收标准 + 先运行后走查
-            ├── state-persistence.md     # 跨轮状态持久化机制
-            └── example-session.md       # ★ 每次触发必读：完整 Sprint 对话样本 + 反例片段集
+├── CHANGELOG.md                         # 变更记录
+├── Description.md                       # 中英文简介
+└── Junior-Sprint-v1.3.0/               # ★ Skill 主包（拍平到仓库根；目录名含版本号，skill id 仍是 junior-sprint）
+    ├── SKILL.md                         # ★ Skill 主入口：5 阶段工作流 + 核心原则
+    ├── interface.yaml                   # 元数据单一真源（display_name / default_prompt）
+    ├── agents/
+    │   └── openai.yaml                  # 自动镜像，勿手改
+    ├── assets/
+    │   ├── scripts/
+    │   │   ├── check_demand_card.py     # 阶段 1 发布前自检
+    │   │   ├── test_check_demand_card.py# 自检脚本的 7 用例自测
+    │   │   └── selftest.sh              # 自测入口
+    │   └── templates/
+    │       ├── demand-card.md           # 阶段 1 输出：需求卡模板
+    │       ├── retro-report.md           # 阶段 4 输出：复盘报告模板
+    │       └── sprint-state.md          # 跨轮持久化：Sprint 状态模板
+    └── references/                      # 方法论权威参考
+        ├── demand-generation.md         # 阶段 1：需求生成 + L1/L2/L3 难度 + AI 主动换档
+        ├── demand-seeds.md              # Python / Java 需求种子库
+        ├── guidance-ethics.md           # 阶段 3：渐进梯度 + 三段式进入条件 + 红线
+        ├── acceptance-review.md         # 阶段 4：验收标准 + 先运行后走查
+        ├── state-persistence.md         # 跨轮状态持久化机制
+        └── example-session.md           # ★ 每次触发必读：完整 Sprint 对话样本 + 反例片段集
 ```
 
-> 完整工作流、阶段切换判定、各 reference 加载时机见 [skills/junior-sprint/SKILL.md](./skills/junior-sprint/SKILL.md)
+> 完整工作流、阶段切换判定、各 reference 加载时机见 [Junior-Sprint-v1.3.0/SKILL.md](./Junior-Sprint-v1.3.0/SKILL.md)
 
 ---
 
@@ -186,7 +189,7 @@ npx skills add WeatherCore/Junior-Sprint -a zcode -g
 
 ```bash
 git clone https://github.com/WeatherCore/Junior-Sprint.git
-cp -r Junior-Sprint/skills/junior-sprint ~/.zcode/skills/junior-sprint
+cp -r Junior-Sprint/Junior-Sprint-v1.3.0 ~/.zcode/skills/Junior-Sprint-v1.3.0
 ```
 
 > 其他 runtime（Claude Code / Codex / Cursor 等）：`npx skills add WeatherCore/Junior-Sprint -a <runtime>` 即可——skill 本体是纯 Markdown 指令，任何 agent 都能读。
