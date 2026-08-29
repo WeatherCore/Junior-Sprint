@@ -7,7 +7,7 @@
 *收需求 → 自我攻坚 → 卡点求助 → 交付验收，复刻职场完整闭环*
 
 [![Skill](https://img.shields.io/badge/ZCode-Skill-7C3AED?style=flat-square)](https://github.com/WeatherCore/Junior-Sprint)
-[![Version](https://img.shields.io/badge/version-1.3.0-3776AB?style=flat-square)](./Junior-Sprint-v1.3.0/SKILL.md)
+[![Version](https://img.shields.io/badge/version-1.4.0-3776AB?style=flat-square)](./Junior-Sprint-v1.4.0/SKILL.md)
 [![License](https://img.shields.io/badge/License-MIT-D4AF37?style=flat-square)](./LICENSE)
 [![Python](https://img.shields.io/badge/训练栈-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Java](https://img.shields.io/badge/训练栈-Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -134,7 +134,7 @@ Junior-Sprint/
 ├── README.md                            # 本文件
 ├── CHANGELOG.md                         # 变更记录
 ├── Description.md                       # 中英文简介
-└── Junior-Sprint-v1.3.0/               # ★ Skill 主包（拍平到仓库根；目录名含版本号，skill id 仍是 junior-sprint）
+└── Junior-Sprint-v1.4.0/               # ★ Skill 主包（拍平到仓库根；目录名含版本号，skill id 仍是 junior-sprint）
     ├── SKILL.md                         # ★ Skill 主入口：5 阶段工作流 + 核心原则
     ├── interface.yaml                   # 元数据单一真源（display_name / default_prompt）
     ├── agents/
@@ -142,7 +142,7 @@ Junior-Sprint/
     ├── assets/
     │   ├── scripts/
     │   │   ├── check_demand_card.py     # 阶段 1 发布前自检
-    │   │   ├── test_check_demand_card.py# 自检脚本的 7 用例自测
+    │   │   ├── test_check_demand_card.py# 自检脚本的 14 用例自测
     │   │   └── selftest.sh              # 自测入口
     │   └── templates/
     │       ├── demand-card.md           # 阶段 1 输出：需求卡模板
@@ -157,7 +157,7 @@ Junior-Sprint/
         └── example-session.md           # ★ 每次触发必读：完整 Sprint 对话样本 + 反例片段集
 ```
 
-> 完整工作流、阶段切换判定、各 reference 加载时机见 [Junior-Sprint-v1.3.0/SKILL.md](./Junior-Sprint-v1.3.0/SKILL.md)
+> 完整工作流、阶段切换判定、各 reference 加载时机见 [Junior-Sprint-v1.4.0/SKILL.md](./Junior-Sprint-v1.4.0/SKILL.md)
 
 ---
 
@@ -189,7 +189,7 @@ npx skills add WeatherCore/Junior-Sprint -a zcode -g
 
 ```bash
 git clone https://github.com/WeatherCore/Junior-Sprint.git
-cp -r Junior-Sprint/Junior-Sprint-v1.3.0 ~/.zcode/skills/Junior-Sprint-v1.3.0
+cp -r Junior-Sprint/Junior-Sprint-v1.4.0 ~/.zcode/skills/Junior-Sprint-v1.4.0
 ```
 
 > 其他 runtime（Claude Code / Codex / Cursor 等）：`npx skills add WeatherCore/Junior-Sprint -a <runtime>` 即可——skill 本体是纯 Markdown 指令，任何 agent 都能读。
