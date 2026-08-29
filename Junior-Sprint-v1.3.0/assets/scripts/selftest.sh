@@ -12,15 +12,16 @@ if command -v cygpath >/dev/null 2>&1; then
   SCRIPT_DIR="$(cygpath -w "$SCRIPT_DIR")"
 fi
 
+# 探测可用的解释器：不仅要在 PATH 里，还要真能运行——
+# Windows 的 python3 可能是 Microsoft Store 占位别名（在 PATH 中存在但执行即失败），
+# 所以用 `"$PY" -c ""` 实测，失败就退而求其次用 python。
 PY="${PYTHON:-python3}"
-
-# 找不到 python3 时退而求其次用 python
-if ! command -v "$PY" >/dev/null 2>&1; then
+if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c "" >/dev/null 2>&1; then
   PY="python"
 fi
 
-if ! command -v "$PY" >/dev/null 2>&1; then
-  echo "未找到 python，请设置 PYTHON 环境变量指向可用的 Python 解释器" >&2
+if ! command -v "$PY" >/dev/null 2>&1 || ! "$PY" -c "" >/dev/null 2>&1; then
+  echo "未找到可用的 python，请设置 PYTHON 环境变量指向可用的 Python 解释器" >&2
   exit 2
 fi
 
