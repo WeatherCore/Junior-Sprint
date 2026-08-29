@@ -9,17 +9,20 @@
     python check_demand_card.py card.md --allow 文件,方法  # 放行确属业务用法的词
 
 检查项：
-  1. 结构 —— 三要素（背景 / 要什么 / 验收标准）章节齐全；验收标准 ≥3 条；
+  1. 结构 —— 三要素（背景 / 要什么 / 验收标准）章节齐全（标题允许"背景：xxx"
+     式冒号 / 空格 / 括号后缀）；验收标准 ≥3 条（项目符号 - * 或编号 1. 1、 1) 均可）；
      含 Sprint ID（S-YYYYMMDD-N，N ≥1 位，与复盘报告 / state 文件一致）。
   2. 技术词泄漏 —— 分两级：
      硬性（FAIL）：语义无歧义的技术词，命中即必须改写——接口、数据库、字段、
        端点、路由、函数、变量、数据表、返回值、请求体，及 API / HTTP / JSON /
-       SQL 等英文术语与常见框架名。
+       SQL / GET / POST 等英文术语、HTTP 方法动词（大写敏感）与常见框架名。
+       硬性词不接受 --allow 放行，传入时忽略并提示。
      软性（WARN）：业务语境可能合法的词（文件 / 方法 / 参数 / 异常 / 缓存……），
        命中出告警，由 AI 结合上下文判断；确属业务用法（如"上传文件""付款方法"）
-       用 --allow 放行。
+       用 --allow 放行。同行按最长词占位，"配置文件"不会再重复报"文件"。
      说明：SKILL.md 客户口吻禁词表中的"文件 / 类 / 方法"在日常中文里一语多义，
-     脚本把它们归入软性层，是为了区分"必须重写"与"需要确认"；禁词规则本身不变。
+     脚本把"文件 / 方法"归入软性层、"类"暂不收录（歧义过大，误报不可用），
+     是为了区分"必须重写"与"需要确认"；禁词规则本身不变。
 
 退出码：0 通过（允许有软性告警）；1 硬性违规或结构缺失；2 输入错误。
 """
@@ -49,16 +52,25 @@ HARD_EN = [
     r"\bDTOs?\b", r"\bDAOs?\b",
     r"\bfastapi\b", r"\bflask\b", r"\bdjango\b", r"\bpytest\b",
     r"\bpydantic\b", r"\bsqlalchemy\b", r"\bmybatis\b", r"\bjpa\b",
-    r"\bhibernate\b", r"\bspring\s+boot\b", r"\bcontrolleradvice\b",
+    r"\bhibernate\b", r"\bspring[\s-]?boot\b", r"\bcontrolleradvice\b",
+    r"\buvicorn\b", r"\bgunicorn\b", r"\bsqlite3?\b", r"\bmysql\b",
+    r"\bpostgres(?:ql)?\b", r"\bredis\b", r"\bmongo(?:db)?\b", r"\bdocker\b",
 ]
+
+# HTTP 方法动词——通常大写，按大小写敏感匹配，避免误伤"get 到"这类口语
+HARD_EN_CS = [r"\b(?:GET|POST|PUT|PATCH|DELETE)\b"]
 
 REQUIRED_SECTIONS = ["背景", "要什么", "验收标准"]
 SPRINT_ID_RE = re.compile(r"S-\d{8}-\d{1,}")
+# 章节标题允许"背景：为什么要做"式冒号 / 空格 / 括号后缀。
+# 分隔符用 [ \t:] 不用 \s——\s 能匹配换行，无后缀时会把下一行第一条验收标准吞进标题匹配
 SECTION_HEADING_RES = {
-    "背景": re.compile(r"^#{2,6}\s*(?:业务背景|背景)\s*$", re.M),
-    "要什么": re.compile(r"^#{2,6}\s*要什么\s*$", re.M),
-    "验收标准": re.compile(r"^#{2,6}\s*验收标准\s*$", re.M),
+    "背景": re.compile(r"^#{2,6}\s*(?:业务)?背景(?:[ \t:：（(].*)?$", re.M),
+    "要什么": re.compile(r"^#{2,6}\s*要什么(?:[ \t:：（(].*)?$", re.M),
+    "验收标准": re.compile(r"^#{2,6}\s*验收标准(?:[ \t:：（(].*)?$", re.M),
 }
+# 验收标准条目：项目符号 - * 或编号 1. 1、 1) 均可
+ACCEPT_ITEM_RE = re.compile(r"^\s*(?:[-*+]|\d{1,2}[.、)])\s*\S")
 # 模板元信息（格式说明行、HTML 注释）不参与扫描
 META_LINE_RE = re.compile(r"^\s*(?:<!--|>\s*格式说明)")
 
@@ -92,35 +104,61 @@ def check_structure(text):
         nxt = re.search(r"^#{1,6}\s", seg, re.M)
         if nxt:
             seg = seg[: nxt.start()]
-        items = [l for l in seg.splitlines() if re.match(r"^\s*[-*]\s+\S", l)]
+        items = [l for l in seg.splitlines() if ACCEPT_ITEM_RE.match(l)]
         if len(items) < 3:
             problems.append("验收标准只有 %d 条（要求 ≥3，含范围边界）" % len(items))
     return problems, sprint_id
 
 
 def scan_terms(lines, allow):
+    """扫描技术词泄漏。allow 仅对软性词生效——硬性词必须改写，不许放行。"""
     hard, soft, seen = [], [], set()
 
     def allowed(term):
         return any(term.lower() == a.lower() for a in allow)
 
-    for no, line in enumerate(lines, 1):
-        if META_LINE_RE.match(line):
+    def record(bucket, no, term, raw):
+        if (no, term) in seen:
+            return
+        seen.add((no, term))
+        bucket.append((no, term, raw.strip()))
+
+    for no, raw in enumerate(lines, 1):
+        if META_LINE_RE.match(raw):
             continue
-        for term in HARD_CN:
-            if term in line and (no, term) not in seen and not allowed(term):
-                seen.add((no, term))
-                hard.append((no, term, line.strip()))
-        for term in SOFT_CN:
-            if term in line and (no, term) not in seen and not allowed(term):
-                seen.add((no, term))
-                soft.append((no, term, line.strip()))
+        # 中文词按长度降序扫描并占位已命中片段，避免「配置文件」重复报「文件」
+        work = raw
+        for term in sorted(HARD_CN, key=len, reverse=True):
+            if term in work:
+                work = work.replace(term, "\uffff" * len(term))
+                record(hard, no, term, raw)
+        for term in sorted(SOFT_CN, key=len, reverse=True):
+            if term in work:
+                work = work.replace(term, "\uffff" * len(term))
+                if not allowed(term):
+                    record(soft, no, term, raw)
         for pat in HARD_EN:
-            m = re.search(pat, line, re.IGNORECASE)
-            if m and (no, m.group(0)) not in seen and not allowed(m.group(0)):
-                seen.add((no, m.group(0)))
-                hard.append((no, m.group(0), line.strip()))
+            m = re.search(pat, work, re.IGNORECASE)
+            if m:
+                record(hard, no, m.group(0), raw)
+        for pat in HARD_EN_CS:
+            m = re.search(pat, work)
+            if m:
+                record(hard, no, m.group(0), raw)
     return hard, soft
+
+
+def split_allow(allow):
+    """把 --allow 列表拆成（可放行的软性词, 被忽略的硬性词）。"""
+    soft, ignored = [], []
+    for a in allow:
+        if a in HARD_CN \
+                or any(re.fullmatch(p, a, re.IGNORECASE) for p in HARD_EN) \
+                or any(re.fullmatch(p, a) for p in HARD_EN_CS):
+            ignored.append(a)
+        else:
+            soft.append(a)
+    return soft, ignored
 
 
 def brief(line, limit=48):
@@ -144,7 +182,10 @@ def main():
                     help="放行确属业务用法的词；可逗号分隔，可多次传入")
     args = ap.parse_args()
 
-    allow = [t.strip() for chunk in args.allow for t in chunk.split(",") if t.strip()]
+    allow_raw = [t.strip() for chunk in args.allow for t in chunk.split(",") if t.strip()]
+    allow, ignored = split_allow(allow_raw)
+    if ignored:
+        print("[提示] --allow 仅对软性词生效，已忽略硬性词：%s（必须改写）" % "、".join(ignored))
 
     text = load_text(args.path)
     lines = text.splitlines()
