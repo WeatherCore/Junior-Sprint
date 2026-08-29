@@ -2,6 +2,30 @@
 
 本项目所有重要变更记录于此。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本遵循语义化版本。
 
+## [1.4.0] - 2026-08-28
+
+### Fixed
+
+- **`check_demand_card.py`：`--allow` 不再放行硬性词（P0）**。此前 `--allow 接口` 可把硬性 FAIL 变成退出码 0「可以发布」，绕过阶段 1 机械闸——现 `--allow` 仅对软性词生效，硬性词传入时忽略并提示"必须改写"。
+- **`check_demand_card.py`：补 HTTP 方法动词（P0）**。新增大小写敏感的 `GET / POST / PUT / PATCH / DELETE` 硬性词（大写敏感是为不误伤"get 到"这类口语）；`spring boot` 正则放宽为兼容 "SpringBoot" / "spring-boot"；补 uvicorn / gunicorn / sqlite / mysql / postgres / redis / mongodb / docker 高频词。
+- **`check_demand_card.py`：编号列表误判（P1）**。验收标准条目计数此前只认 `-` / `*` 项目符号，`1. / 1、 / 1)` 编号会被误判为"0 条"；现兼容编号列表。
+- **`check_demand_card.py`：标题后缀误判（P1）**。章节标题此前要求整行精确等于「背景」等，`## 背景：为什么要做` 会误报缺失；现允许冒号 / 空格 / 括号后缀。
+- **`check_demand_card.py`：软性词重复告警（P2）**。中文词按最长匹配占位，「配置文件」不再同时报「文件」+「配置文件」两条告警。
+- **统一"懂了"分流口径（P1）**。guidance-ethics 梯度递进规则（"懂了"→跳出）与 SKILL.md 阶段 3 门禁（"懂了"→升级或跳出）此前矛盾，且与 example-session 样本（"懂思路了但不知道语法"→升一级）不一致；现统一为：懂了且能推进 → 跳出（拿不准用"装懂"话术追问验证）；懂了但明确做不出来 → 升一级。
+- **`draft-card.md` 写入权矛盾（P2）**。阶段 1 硬性步骤要求把草稿写入 `.junior-sprint/draft-card.md`，但 Constraints"唯一例外"只列了 state.md；现例外扩为 `.junior-sprint/` 目录过程文件，并明确草稿发布后删除。
+- **`selftest.sh`：解释器探测（P2）**。Windows 上 `python3` 可能是 Microsoft Store 占位别名——在 PATH 中存在但执行即失败（实测退出码 49），旧逻辑只检查"是否存在"导致自测入口静默挂掉；现用 `"$PY" -c ""` 实测可用性，失败自动回退 `python`。
+- **触发词章节自相矛盾（P2）**。"技术栈非 Python/Java"原列在"不适用场景（拒绝）"下但处置是"仍可侦察"；现移入新增的"受限场景（可用，但先说明局限）"。
+
+### Changed
+
+- **验收结论与五维评分解耦（P2）**。"某维度 <3 触发打回"取消——评分只进复盘与下轮换档，打回仅由业务级缺陷触发（工程硬伤如回归已由逐条核对第 4 条按业务缺陷拦截），消除"沟通 2 分也要业务打回但无缺陷可指"的矛盾。
+- SKILL.md 软性词示例去掉「类」（词表刻意不收，避免 类型 / 分类 大面积误报），与脚本实现对齐。
+- 复盘报告补「沟通」叙述章（模板 + 验收参考清单 + example-session 样本对齐），样本报告补齐 Sprint ID 字段、跨轮对比细化与「下轮建议（AI 主动）」章节，与模板结构一致。
+
+### Added
+
+- `test_check_demand_card.py` 用例 7 → 14：新增 HTTP 动词拦截与小写 get 不误报 / 编号列表计数 / 冒号标题 / 无后缀标题恰好 3 条不吞行 / 长词去重 / SpringBoot 无空格 / `--allow` 硬性词忽略 / `--allow` 软性词放行。
+
 ## [1.3.0] - 2026-08-27
 
 ### Fixed
