@@ -85,7 +85,7 @@ def load_text(path):
         except OSError as exc:
             print("[错误] 无法读取 %s：%s" % (path, exc))
             sys.exit(2)
-    return data.decode("utf-8-sig", errors="replace")
+    return data.decode("utf-8-sig", errors="replace").replace("\r\n", "\n").replace("\r", "\n")
 
 
 def check_structure(text):
