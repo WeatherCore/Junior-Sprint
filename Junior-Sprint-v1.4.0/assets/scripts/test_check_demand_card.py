@@ -145,6 +145,22 @@ def test_springboot_no_space_fails():
     assert any(t.lower() == "springboot" for _, t, _ in hard), "无空格写法也应命中"
 
 
+def test_crlf_file_passes():
+    # Windows 草稿常为 CRLF 行尾：结构校验不得因 \r 误判标题缺失（回归：标题正则 $ 匹配不到 \r 前位置）
+    import tempfile
+    text = _valid_card().replace("\n", "\r\n")
+    fd, path = tempfile.mkstemp(suffix=".md")
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(text.encode("utf-8"))
+        loaded = linter.load_text(path)
+    finally:
+        os.remove(path)
+    problems, sid = linter.check_structure(loaded)
+    assert not problems, problems
+    assert sid == "S-20260820-01"
+
+
 def main():
     tests = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     passed = 0
