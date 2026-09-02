@@ -7,7 +7,7 @@
 *收需求 → 自我攻坚 → 卡点求助 → 交付验收，复刻职场完整闭环*
 
 [![Skill](https://img.shields.io/badge/ZCode-Skill-7C3AED?style=flat-square)](https://github.com/WeatherCore/Junior-Sprint)
-[![Version](https://img.shields.io/badge/version-1.4.0-3776AB?style=flat-square)](./Junior-Sprint-v1.4.0/SKILL.md)
+[![Version](https://img.shields.io/badge/version-1.5.0-3776AB?style=flat-square)](./Junior-Sprint-v1.5.0/SKILL.md)
 [![License](https://img.shields.io/badge/License-MIT-D4AF37?style=flat-square)](./LICENSE)
 [![Python](https://img.shields.io/badge/训练栈-Python-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Java](https://img.shields.io/badge/训练栈-Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
@@ -108,6 +108,7 @@ flowchart TB
 - 📈 **跨轮成长追踪** — 读 `SPRINT-RETRO.md` 比对上轮评分主动换档，避免"每轮从零开始"的训练幻觉
 - 🛡️ **防作弊 / 防一键退出** — 学习者说"不练了帮我做"时先要求描述目标+卡点+已尝试+退出理由，坚持退出则接管但复盘标注"中途退出"
 - 💾 **Sprint 状态持久化** — 长 Sprint（L3 半天以上）跨多轮对话由 AI 主动维护 `.junior-sprint/state.md`，防失忆
+- 🎲 **需求变更剧情 + 估时训练** — L2/L3 攻坚过半客户可插入一次小变更（训练范围确认与谈判）；阶段 1 收集学习者估时，复盘对比"估时 vs 实际"
 - 🧪 **先运行后走查验收** — 优先实际跑测试（`pytest` / `mvn test` / `gradle test`）/ 启动服务 / 跑 CLI 验证关键路径，跑不起来才退回代码走查；可能产生不可逆外部影响时先征得学习者确认
 - 🧹 **需求卡发布前自检** — `check_demand_card.py` 校验三要素 / Sprint ID / 技术词泄漏，把"身份撕裂"从模型自律变成机械校验
 - 📊 **五维评分复盘** — 需求理解 / 拆解质量 / 自主排错 / 工程习惯 / 沟通，1-5 分加改进点，另附职场视角叙述章
@@ -134,7 +135,7 @@ Junior-Sprint/
 ├── README.md                            # 本文件
 ├── CHANGELOG.md                         # 变更记录
 ├── Description.md                       # 中英文简介
-└── Junior-Sprint-v1.4.0/               # ★ Skill 主包（拍平到仓库根；目录名含版本号，skill id 仍是 junior-sprint）
+└── Junior-Sprint-v1.5.0/               # ★ Skill 主包（拍平到仓库根；目录名含版本号，skill id 仍是 junior-sprint）
     ├── SKILL.md                         # ★ Skill 主入口：5 阶段工作流 + 核心原则
     ├── interface.yaml                   # 元数据单一真源（display_name / default_prompt）
     ├── agents/
@@ -154,10 +155,10 @@ Junior-Sprint/
         ├── guidance-ethics.md           # 阶段 3：渐进梯度 + 三段式进入条件 + 红线
         ├── acceptance-review.md         # 阶段 4：验收标准 + 先运行后走查
         ├── state-persistence.md         # 跨轮状态持久化机制
-        └── example-session.md           # ★ 每次触发必读：完整 Sprint 对话样本 + 反例片段集
+        └── example-session.md           # ★ 反例片段集每次触发必读；分阶段样本按阶段路由精读
 ```
 
-> 完整工作流、阶段切换判定、各 reference 加载时机见 [Junior-Sprint-v1.4.0/SKILL.md](./Junior-Sprint-v1.4.0/SKILL.md)
+> 完整工作流、阶段切换判定、各 reference 加载时机见 [Junior-Sprint-v1.5.0/SKILL.md](./Junior-Sprint-v1.5.0/SKILL.md)
 
 ---
 
@@ -189,7 +190,7 @@ npx skills add WeatherCore/Junior-Sprint -a zcode -g
 
 ```bash
 git clone https://github.com/WeatherCore/Junior-Sprint.git
-cp -r Junior-Sprint/Junior-Sprint-v1.4.0 ~/.zcode/skills/Junior-Sprint-v1.4.0
+cp -r Junior-Sprint/Junior-Sprint-v1.5.0 ~/.zcode/skills/Junior-Sprint-v1.5.0
 ```
 
 > 其他 runtime（Claude Code / Codex / Cursor 等）：`npx skills add WeatherCore/Junior-Sprint -a <runtime>` 即可——skill 本体是纯 Markdown 指令，任何 agent 都能读。
@@ -236,6 +237,7 @@ sequenceDiagram
 - [x] 渐进梯度 6 级指导 + 防一键退出
 - [x] 跨轮成长追踪（SPRINT-RETRO.md 比对 + AI 主动换档）
 - [x] Sprint 状态持久化（.junior-sprint/state.md）
+- [x] 需求变更剧情（范围应对）+ 估时 vs 实际追踪 + 主动汇报节拍（1.5.0）
 - [ ] 扩展训练栈覆盖（Go / TypeScript / Rust）
 - [ ] 接入真实 CI 验收（跑测试覆盖率门槛）
 - [ ] 多学习者协作 Sprint（模拟团队需求交付）
