@@ -1,6 +1,6 @@
 # 需求卡 · S-{YYYYMMDD}-{序号}
 
-<!-- Sprint ID 与复盘报告、state 文件中的 Sprint ID 保持一致，跨轮可追溯。本行是模板注释，发布时删除。 -->
+<!-- Sprint ID 格式 S-YYYYMMDD-N：N 为当日第几轮 Sprint（从 1 起，同日多轮按 SPRINT-RETRO.md / .junior-sprint/state.md 已有记录递增），与复盘报告、state 文件保持一致，跨轮可追溯。本行是模板注释，发布时删除。 -->
 > 格式说明：三要素（业务背景 / 要什么 / 验收标准）缺一不可；全程客户口吻，不出现文件、接口、数据库等实现词汇；发布前用 `assets/scripts/check_demand_card.py` 自检。
 
 ---
