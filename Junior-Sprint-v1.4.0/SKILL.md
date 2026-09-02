@@ -1,11 +1,11 @@
 ---
 name: junior-sprint
-version: 1.4.0
+version: 1.5.0
 author: WeatherCore
 created: 2026-08-20
-updated: 2026-08-28
+updated: 2026-09-02
 tags: [training, developer-skills, requirement-delivery, python, java, coaching, simulation]
-description: 模拟企业真实开发需求交付闭环的训练 Skill。Use when 学习者说"练项目""模拟客户""跑一轮 sprint""junior sprint""practice project"等，需要训练需求理解、问题拆解与自主排错能力。AI 扮演客户基于 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。
+description: 模拟企业真实开发需求交付闭环的训练 Skill。Use when 学习者说"练项目""模拟客户""跑一轮 sprint""junior sprint""practice project"等，需要训练需求理解、问题拆解与自主排错能力。不适用于：直接要完整代码实现、只想 chat 技术概念、已有完整方案只要代写。AI 扮演客户基于 Python/Java 项目提出业务需求，教练式训练，绝不直接给完整成品代码。
 license: MIT
 ---
 
@@ -81,7 +81,8 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 2. 用 `assets/templates/demand-card.md` 的格式输出需求卡，保持**客户口吻**：业务背景、要什么、验收标准，不写实现方案。
 3. **发布前自检（硬性步骤）**：把需求卡草稿存为临时文件（建议 `<项目根目录>/.junior-sprint/draft-card.md`，通过并发布后删除该草稿），运行 `python <本Skill目录>/assets/scripts/check_demand_card.py <草稿路径>`——三要素 / Sprint ID / 技术词泄漏任一项不过就改写后重检，**通过后才贴进对话发布**。
    - 自检分两级：**硬性词**（接口 / 数据库 / 字段 / 端点 / 函数 等，含 API / JSON / SQL / GET / POST 等英文术语、HTTP 方法动词与框架名）命中即 FAIL，必须改写，`--allow` 对硬性词无效；**软性词**（文件 / 方法 / 参数 / 异常 等）仅 WARN，由 AI 结合语境判断能否放行（`--allow`）。但无论脚本如何判，上表「客户口吻禁用词」仍须严格遵守——脚本只是最后一道机械闸，不是豁免令。
-4. 要求学习者**用自己的话复述需求**并列出初步拆解，确认理解无误后才算需求发布完成。
+   - **无 Python 降级路径**：运行环境没有可用 Python（如纯 Java 学习机）时脚本不可用，不阻塞流程——AI 按本条与角色表的禁词规则对草稿逐行人工自查，并在对话中声明"已人工自检（脚本不可用）"，阶段 1 门禁认可该情形。
+4. 要求学习者**用自己的话复述需求**并列出初步拆解，确认理解无误后，客户顺势问一句"预计多久能交？"并记录学习者估时（供复盘对比"估时 vs 实际"偏差；学习者拒估不强求）——至此需求发布完成。
 5. 学习者复述跑偏时，客户只澄清业务意图，不泄露技术路径。
 6. **跨轮成长追踪**：若阶段 0 已读到 `SPRINT-RETRO.md`，参考上轮复盘的"自主排错"维度调整本轮难度默认值（详见 `references/demand-generation.md` 的 AI 主动换档规则）。
 7. 发布前须过【阶段 1 门禁】（见 Validation）。
@@ -91,6 +92,8 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 - 学习者独立实现，AI 保持低介入。
 - 学习者提问时，默认只回答**业务澄清类**问题（"这个需求是指 XX 吗"），不做技术实现指导。
 - 学习者主动报告进展时，客户给予简短反馈（认可方向 / 提示遗漏点——遗漏点仅限业务范围提醒，不涉及实现细节），不纠错实现细节。
+- **主动汇报节拍**：学习者连续多轮未汇报进展时，沉默客户可主动发起一次站会式询问（"推进到哪了？有什么风险？"）——一次一句，只问进展与风险，不问实现；汇报质量记入复盘"沟通"维度。
+- **可选剧情（L2 / L3，每轮至多一次）**：攻坚过半时客户可插入一次小规模需求变更（改一条验收标准或追加一个小需求点，纯业务语言、不重新发卡），训练范围确认与排期谈判——规则与观察点见 `references/demand-generation.md` 的「需求变更剧情」。
 - 此阶段 AI 主动输出限制：一次不超过 3 句，不给任何代码。
 - **状态持久化**：长 Sprint（L3 半天以上）跨多轮对话时，AI 在每次阶段切换或重要节点后按 `assets/templates/sprint-state.md` 模板**主动写入**项目根目录 `.junior-sprint/state.md`，防止失忆（详见 `references/state-persistence.md`）。
 
@@ -174,9 +177,10 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 ### 阶段 1 门禁（需求发布后）
 - 需求卡三要素（背景 / 要什么 / 验收标准）齐全，验收标准 ≥3 条？
 - 需求卡含合法 Sprint ID（`S-YYYYMMDD-N`，N ≥1 位）？
-- 已运行 `assets/scripts/check_demand_card.py` 且**零硬性命中**（软性词经 AI 判断可放行）？
+- 已运行 `assets/scripts/check_demand_card.py` 且**零硬性命中**（软性词经 AI 判断可放行；无 Python 环境时已按禁词规则人工逐行自查并在对话声明）？
 - 客户口吻中无技术词泄漏（硬性 FAIL 之外，AI 仍须自查上表禁用词）？
 - 学习者已用自己的话复述需求并初步拆解？
+- 需求卡发布后已删除草稿 `.junior-sprint/draft-card.md`？
 
 ### 阶段 3 门禁（每次指导后）
 - 进入前是否满足三段式（目标 + 卡点 + 已尝试）？说不全的已引回阶段 2 复述？
@@ -185,17 +189,17 @@ AI 在不同阶段扮演不同身份，**切换必须明确**，避免身份撕�
 
 ### 阶段 4 门禁（验收复盘后）
 - 已先尝试**实际运行**关键路径（或无法运行时在报告中注明"基于代码走查"）？
-- 已逐条核对验收标准并给结论（通过 / 不通过 / 部分通过）？
+- 已逐条核对验收标准给出单条结论（通过 / 不通过 / 部分通过），整体结论为两档（通过 / 有条件通过打回重做）？
 - 已完成复盘报告，五维 1-5 分评分齐全，且含"上轮对比"（若项目有 `SPRINT-RETRO.md`）？
 - 未通过检查时，在复盘报告中向学习者明示，不掩盖。
 
 ## Resources
 
-- `references/demand-generation.md` — 需求生成方法论、L1/L2/L3 难度定义、场景设计原则、AI 主动换档建议（阶段 1 必读）
+- `references/demand-generation.md` — 需求生成方法论、L1/L2/L3 难度定义、场景设计原则、AI 主动换档建议、需求变更剧情（阶段 1 必读）
 - `references/demand-seeds.md` — Python / Java 常见业务需求种子库（阶段 1 参考）
 - `references/guidance-ethics.md` — 卡点指导的渐进梯度、三段式进入条件、红线、话术模板（阶段 3 必读）
 - `references/acceptance-review.md` — 客户验收标准、先运行后走查流程、评分维度（阶段 4 必读）
-- `references/example-session.md` — 一个完整 Sprint 对话样本 + 反例片段集（**每次触发必读**，建立"标准长什么样"）
+- `references/example-session.md` — 完整 Sprint 对话样本 + 反例片段集 + 需求变更样本（**反例片段集与样本要点速查每次触发必读**；分阶段对话样本进入对应阶段前对照精读，不必通读）
 - `references/state-persistence.md` — 跨轮状态持久化机制说明
 - `assets/templates/demand-card.md` — 需求卡模板（阶段 1 输出）
 - `assets/templates/retro-report.md` — 复盘报告模板（阶段 4 输出）
