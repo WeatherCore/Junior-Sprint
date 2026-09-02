@@ -11,6 +11,7 @@
 - **sprint_id**：S-{YYYYMMDD}-{序号}，如 `S-20260820-01`
 - **project**：{项目名 / 技术栈}
 - **difficulty**：L{1/2/3}
+- **estimate**：{学习者交付估时（阶段 1 收集，如"半天"），复盘时对比实际}
 - **session_count**：本轮 Sprint 已进行的对话次数：{N}
 - **started_at**：{ISO 8601 时间}
 - **last_updated**：{ISO 8601 时间}
@@ -24,6 +25,7 @@
 ## 需求卡快照
 
 - **demand_title**：{一句话需求}
+- **designed_fuzzy_points**：{本轮刻意留下的 1-2 个模糊点，复盘时核对学习者是否主动澄清}
 - **background**：{业务背景一句话}
 - **wants**：
   - {业务行为 1}
